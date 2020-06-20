@@ -1,6 +1,6 @@
 # Discord-Archive-Bot
 
-Simple Archiving bot for Discord.
+Simple Archiving bot for Discord which archives the server in real time.
 
 **NOTE: Not finished, work in progress!**
 
@@ -12,6 +12,8 @@ Simple Archiving bot for Discord.
 - **!stats** command
 
 ### TODO (Unimplemented):
+- A command for archiving the old messages which have been sent before the bot was added
+- Update the messages when they are edited
 - Detect message pin/unpin
 - Archive user list
 - Server wipe command (If you want to start with the clean server and populate it from the archive)
