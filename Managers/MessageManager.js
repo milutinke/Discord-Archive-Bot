@@ -39,6 +39,10 @@ class MessageManager {
         // Calculate the total message size in bytes (excluding attachments)
         let totalBytes = Utils.getBinarySize(content);
 
+        // Skip empty messages
+        if (foundAttachments.length === 0 && !content)
+            return;
+
         // Download found attachments if there are any
         if (foundAttachments.length > 0) {
             if (BotConfig.debug)
@@ -186,6 +190,7 @@ class MessageManager {
             console.log(`New message content after formatting: [${newMessageContent}]`.green);
 
         archivedMessage.message = newMessageContent;
+        archivedMessage.pinned = newMessageObject.pinned;
         await archivedMessage.save();
 
         if (BotConfig.debug)

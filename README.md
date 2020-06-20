@@ -13,10 +13,9 @@ Simple Archiving bot for Discord which archives the server in real time.
 - Member list archiving (Join date, last name, name change histrory, number of reentries to the server)
 - **!stats** command
 - Updates the messages if they are edited or the channel name is changed
+- Detects message Pin/Unpin
 
 ### TODO (Unimplemented):
-
-- Detect message pin/unpin
 - Server wipe command (If you want to start with the clean server and populate it from the archive)
 - Populate command (Sends all archived messages on the server)
 - Web Interface (Might not be implemented)
