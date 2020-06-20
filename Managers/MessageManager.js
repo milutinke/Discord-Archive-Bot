@@ -10,20 +10,7 @@ class MessageManager {
         if (BotConfig.debug)
             console.log(`----------------------------------------------[ DEBUG ]----------------------------------------------`.cyan);
 
-        // Get message content
-        let content = messageObject.content.trim();
-
-        // Replace mentiones user ids with their nicknames or usernames if nicknames are not set
-        messageObject.mentions.members.forEach(member => {
-            const memberName = !member.nickname ? member.user.username : member.nickname;
-
-            content = content.replace(`<@!${member.id}>`, `@${memberName}`).trim();
-            content = content.replace(`<@${member.id}>`, `@${memberName}`).trim();
-            content = content.replace(`<@&${member.id}>`, `@${memberName}`).trim();
-        });
-
-        // Replace channel ids with channel names
-        messageObject.guild.channels.forEach(channel => content = content.replace(`<#${channel.id}>`, `#${channel.name}`).trim());
+        let content = MessageManager.getMessageFormatedContent(messageObject);
 
         if (BotConfig.debug && content && content.length)
             console.log(`Message after the formatting: [${content}]`.green);
@@ -114,7 +101,7 @@ class MessageManager {
             const messageDbObject = new Message();
             messageDbObject.authorId = authorId;
             messageDbObject.authorName = authorName;
-            messageDbObject.timestamp = Date.now().toString();
+            messageDbObject.timestamp = messageObject.createdTimestamp;
             messageDbObject.channelName = messageObject.channel.name;
             messageDbObject.message = content;
             messageDbObject.attachments = downloadedAttachments;
@@ -146,11 +133,73 @@ class MessageManager {
             if (BotConfig.debug)
                 console.log(`Statistics updated!`.cyan);
         } catch (e) {
-            console.log('Error while saving the message: ' + error.message);
+            console.log('Error while saving the message: ' + e.message);
         } finally {
             if (BotConfig.debug)
                 console.log(`----------------------------------------------[ DEBUG ]----------------------------------------------`.cyan);
         }
+    }
+
+    static getMessageFormatedContent(messageObject) {
+        // Get message content
+        let content = messageObject.content.trim();
+
+        // Replace mentiones user ids with their nicknames or usernames if nicknames are not set
+        messageObject.mentions.members.forEach(member => {
+            const memberName = !member.nickname ? member.user.username : member.nickname;
+
+            content = content.replace(`<@!${member.id}>`, `@${memberName}`).trim();
+            content = content.replace(`<@${member.id}>`, `@${memberName}`).trim();
+            content = content.replace(`<@&${member.id}>`, `@${memberName}`).trim();
+        });
+
+        // Replace channel ids with channel names
+        messageObject.guild.channels.forEach(channel => content = content.replace(`<#${channel.id}>`, `#${channel.name}`).trim());
+
+        return content;
+    }
+
+    static async updateMessage(client, oldMessageObject, newMessageObject) {
+        if (!newMessageObject.content.trim())
+            return;
+
+        let oldMessageContent = MessageManager.getMessageFormatedContent(oldMessageObject);
+
+        if (BotConfig.debug && oldMessageContent && oldMessageContent.length)
+            console.log(`Old message content after formatting: [${oldMessageContent}]`.green);
+
+        // Extract message author information
+        const authorId = oldMessageObject.author.id;
+
+        const archivedMessage = await Message.findOne({
+            authorId,
+            timestamp: oldMessageObject.createdTimestamp,
+            message: oldMessageContent
+        });
+
+        if (!archivedMessage)
+            return;
+
+        let newMessageContent = MessageManager.getMessageFormatedContent(newMessageObject);
+
+        if (BotConfig.debug && newMessageContent && newMessageContent.length)
+            console.log(`New message content after formatting: [${newMessageContent}]`.green);
+
+        archivedMessage.message = newMessageContent;
+        await archivedMessage.save();
+
+        if (BotConfig.debug)
+            console.log(`Message updated in the archive!`.magenta);
+    }
+
+    static async updateMessagesChannel(oldChannelName, newChannelName) {
+        const result = await Message.updateMany({ channelName: oldChannelName }, { $set: { channelName: newChannelName } });
+
+        if (!result)
+            return;
+
+        if (BotConfig.debug)
+            console.log(`${'Updated'.green} ${result.nModified.toString().cyan} ${'messages channel'.green}`);
     }
 }
 

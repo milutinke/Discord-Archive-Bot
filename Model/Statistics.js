@@ -1,7 +1,7 @@
 // Local modules
 const DB = require('../Managers/DBManager').mongoose;
 
-// Create User schema
+// Create Statistics schema
 const statisticsSchema = new DB.Schema({
     messages: {
         type: Number,
@@ -16,11 +16,15 @@ const statisticsSchema = new DB.Schema({
     totalBytes: {
         type: Number,
         required: true
+    },
+
+    totalMembersTracked: {
+        type: Number
     }
 });
 
-// Create User Model
+// Create Statistics Model
 const Statistics = DB.model('Statistics', statisticsSchema);
 
-// Export the User model
+// Export the Statistics model
 module.exports = Statistics;

@@ -1,7 +1,7 @@
 // Local modules
 const DB = require('../Managers/DBManager').mongoose;
 
-// Create User schema
+// Create Attachment schema
 const attachmentSchema = new DB.Schema({
     name: {
         type: String,
@@ -19,8 +19,8 @@ const attachmentSchema = new DB.Schema({
     }
 });
 
-// Create User Model
+// Create Attachment Model
 const Attachment = DB.model('Attachment', attachmentSchema);
 
-// Export the User model
+// Export the Attachment model
 module.exports = Attachment;
