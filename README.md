@@ -19,8 +19,14 @@ Simple Archiving bot for Discord which archives the server in real time.
 - Server wipe command (If you want to start with the clean server and populate it from the archive)
 - Populate command (Sends all archived messages on the server)
 - Web Interface (Might not be implemented)
-- Configuration commands
+- Commands:
+    - Blacklist a channel from being archived
+    - Rollback a particular channel (manually)
+    - Archive a particular channel (manually)
+    - Enable/Disable the !stats command
+    - Prune/Clean the archive
 - Archive export: JSON, PDF, Plain Text, CSV, DOCX
+- Roles archiving
 
 ## Contibuting
 Contact me: **milutinke@gmx.com**
