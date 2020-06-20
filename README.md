@@ -25,6 +25,7 @@ Simple Archiving bot for Discord which archives the server in real time.
     - Archive a particular channel (manually)
     - Enable/Disable the !stats command
     - Prune/Clean the archive
+    - Export archive
 - Archive export: JSON, PDF, Plain Text, CSV, DOCX
 - Roles archiving
 
