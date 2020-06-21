@@ -3,14 +3,20 @@ const Statistics = require('../Model/Statistics');
 const BotConfig = require('../BotConfig');
 const Discord = require('discord.js');
 const PrettySize = require('prettysize');
+const ConfigurationManager = require('../Managers/ConfigurationManager');
 
-class Stats extends AbstractCommand {
+class StatsCommand extends AbstractCommand {
     constructor() {
-        super("stats", "Displays the bot statistics");
+        super("astats", "Displays the bot statistics");
     }
 
     async execute(messageObject, client) {
         let statistics = await Statistics.findOne({});
+
+        if (!(await ConfigurationManager.isStatsCommandEnabled())) {
+            messageObject.channel.send("This command has been disabled by the server saff!");
+            return;
+        }
 
         if (!statistics) {
             messageObject.channel.send("No statistics yet!");
@@ -22,4 +28,4 @@ class Stats extends AbstractCommand {
     }
 }
 
-module.exports = Stats;
+module.exports = StatsCommand;

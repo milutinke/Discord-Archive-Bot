@@ -37,8 +37,8 @@ const messageSchema = new DB.Schema({
     attachments: [Attachment.schema]
 });
 
-// Create User Model
+// Create Message Model
 const Message = DB.model('Message', messageSchema);
 
-// Export the User model
+// Export the Message model
 module.exports = Message;

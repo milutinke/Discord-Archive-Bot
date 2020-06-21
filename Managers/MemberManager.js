@@ -1,6 +1,5 @@
 const Member = require('../Model/Member');
 const Statistics = require('../Model/Statistics');
-const FileSystem = require('fs');
 
 class MemberManager {
     static async memberJoinEvent(member) {

@@ -7,6 +7,7 @@ const Colors = require('colors');
 const MessageManager = require('./Managers/MessageManager');
 const CommandManager = require('./Managers/CommandManager');
 const MemberManager = require('./Managers/MemberManager');
+const ConfigurationManager = require('./Managers/ConfigurationManager');
 
 // Initialisation
 Client.on('ready', () => {
@@ -20,8 +21,21 @@ Client.on('message', async messageObject => {
     if (!messageObject)
         return;
 
+    if (await ConfigurationManager.isProcessUnderway()) {
+        if (messageObject.member && messageObject.author.bot)
+            messageObject.member.send('Sorry, you can not send messages right now while the archive restoring process is underway, please be patient.');
+
+        messageObject.delete(0);
+        return;
+    }
+
+    // Skip the bot
+    if (messageObject.author.bot && messageObject.author.id === BotConfig.bot_client_id)
+        return;
+
     // Archive the message
-    await MessageManager.archiveMessage(Client, messageObject);
+    if (await ConfigurationManager.isArchivingEnabled() && !(await ConfigurationManager.isChannelBlacklisted(messageObject.channel.id)))
+        await MessageManager.archiveMessage(Client, messageObject);
 
     // Check if it is a command and execute it
     if (messageObject.content.trim().startsWith(BotConfig.bot_prefix)) {
@@ -37,7 +51,8 @@ Client.on('messageUpdate', async (oldMessageObject, newMessageObject) => {
     if (!oldMessageObject || !newMessageObject)
         return;
 
-    await MessageManager.updateMessage(Client, oldMessageObject, newMessageObject);
+    if (await ConfigurationManager.isArchivingEnabled() && await ConfigurationManager.isMessageUpdateEnabled())
+        await MessageManager.updateMessage(Client, oldMessageObject, newMessageObject);
 });
 
 // If someone has changed the name of the channel, update the channel name in the archived messages
@@ -54,11 +69,15 @@ Client.on('channelUpdate', async (oldChannelObject, newChannelObject) => {
         return;
 
     // Do the update
-    await MessageManager.updateMessagesChannel(oldChannelName, newChannelName);
+    if (await ConfigurationManager.isArchivingEnabled())
+        await MessageManager.updateMessagesChannel(oldChannelName, newChannelName);
 });
 
 // If someone joins, record it
-Client.on('guildMemberAdd', async member => await MemberManager.memberJoinEvent(member));
+Client.on('guildMemberAdd', async member => {
+    if (await ConfigurationManager.isArchivingEnabled())
+        await MemberManager.memberJoinEvent(member);
+});
 
 // If someone updates their nickname
 Client.on('guildMemberUpdate', async (oldMember, newMember) => {
@@ -74,7 +93,8 @@ Client.on('guildMemberUpdate', async (oldMember, newMember) => {
         return;
 
     // Do the update
-    await MemberManager.memberNicknameUpdateEvent(oldMember.id, oldNickname, newNickname);
+    if (await ConfigurationManager.isArchivingEnabled())
+        await MemberManager.memberNicknameUpdateEvent(oldMember.id, oldNickname, newNickname);
 });
 
 // Bot Deinitialisation

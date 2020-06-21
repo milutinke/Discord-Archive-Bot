@@ -24,6 +24,15 @@ class AbstractCommand {
 
 		return client.users.get(matches[1]);
 	}
+
+	getChannelIdFromTag(text) {
+		const matches = text.match(/^<#?(\d+)>$/);
+
+		if (!matches)
+			return undefined;
+
+		return matches[0].toString().replace(/</g, '').replace(/>/g, '').replace(/#/g, '').trim();
+	}
 }
 
 module.exports = AbstractCommand;
