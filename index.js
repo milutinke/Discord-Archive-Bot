@@ -21,17 +21,17 @@ Client.on('message', async messageObject => {
     if (!messageObject)
         return;
 
+    // Skip the bot
+    if (messageObject.author.bot && messageObject.author.id === BotConfig.bot_client_id)
+        return;
+
     if (await ConfigurationManager.isProcessUnderway()) {
-        if (messageObject.member && messageObject.author.bot)
+        if (messageObject.member && !messageObject.author.bot)
             messageObject.member.send('Sorry, you can not send messages right now while the archive restoring process is underway, please be patient.');
 
         messageObject.delete(0);
         return;
     }
-
-    // Skip the bot
-    if (messageObject.author.bot && messageObject.author.id === BotConfig.bot_client_id)
-        return;
 
     // Archive the message
     if (await ConfigurationManager.isArchivingEnabled() && !(await ConfigurationManager.isChannelBlacklisted(messageObject.channel.id)))
@@ -42,7 +42,7 @@ Client.on('message', async messageObject => {
         if (messageObject.author.bot)
             return;
 
-        CommandManager.executeCommand(messageObject, Client);
+        await CommandManager.executeCommand(messageObject, Client);
     }
 });
 
@@ -98,7 +98,8 @@ Client.on('guildMemberUpdate', async (oldMember, newMember) => {
 });
 
 // Bot Deinitialisation
-Client.on("disconnected", () => {
+Client.on("disconnected", async () => {
+    await ConfigurationManager.setProcess(false);
     console.log('Disconnected'.red);
     process.exit(1);
 });

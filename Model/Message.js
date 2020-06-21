@@ -1,6 +1,5 @@
 // Local modules
 const DB = require('../Managers/DBManager').mongoose;
-const Attachment = require('./Attachment');
 
 // Create User schema
 const messageSchema = new DB.Schema({
@@ -34,7 +33,22 @@ const messageSchema = new DB.Schema({
         default: false
     },
 
-    attachments: [Attachment.schema]
+    attachments: [{
+        name: {
+            type: String,
+            required: true
+        },
+
+        path: {
+            type: String,
+            required: true
+        },
+
+        type: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 // Create Message Model

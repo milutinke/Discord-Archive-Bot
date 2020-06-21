@@ -54,6 +54,18 @@ class Utils {
     static commandHasAValidName(commandObject) {
         return (commandObject && commandObject.hasOwnProperty('name') !== false);
     }
+
+    static async getChannelObjectByName(guild, channelName) {
+        return await guild.channels.find(x => x.name === channelName);
+    }
+
+    static async getChannelObjectById(guild, channelId) {
+        return await guild.channels.find(x => x.id === channelId);
+    }
+
+    static async doesChannelExist(guild, channelName) {
+        return await Utils.getChannelObjectByName(guild, channelName) !== null;
+    }
 }
 
 module.exports = Utils;

@@ -27,7 +27,7 @@ class CommandManager {
         }
     }
 
-    executeCommand(messageObject, client) {
+    async executeCommand(messageObject, client) {
         if (!this.commands || this.commands.length === 0)
             return;
 
@@ -58,7 +58,7 @@ class CommandManager {
 
                 if (message.substr(message.indexOf(BotConfig.bot_prefix) + 1, message.length).trim().includes(currentCommand.js.name)) {
                     console.log("Executing: " + message.substr(message.indexOf(BotConfig.bot_prefix) + 1, message.length).trim());
-                    currentCommand.js.execute(messageObject, client);
+                    await currentCommand.js.execute(messageObject, client);
                 }
             }
         }
