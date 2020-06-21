@@ -11,12 +11,6 @@ class RollbackCommand extends AbstractCommand {
         super("arollback", "Restores channels and messages from the Archive or the specified channel");
     }
 
-    static async sleep(ms) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, ms);
-        });
-    }
-
     async execute(messageObject, client) {
         if (!messageObject.member.hasPermission('ADMINISTRATOR')) {
             messageObject.channel.send(`${messageObject.author} - Only the Administrators can use this command!`);

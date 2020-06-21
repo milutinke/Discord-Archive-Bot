@@ -4,6 +4,7 @@ const BotConfig = require('../BotConfig');
 const Utils = require('../Utils');
 const Path = require('path');
 const FileSystem = require('fs');
+const ReplicationManager = require('./ReplicationManager');
 
 class MessageManager {
     static async archiveMessage(client, messageObject) {
@@ -110,6 +111,9 @@ class MessageManager {
             messageDbObject.message = content;
             messageDbObject.attachments = downloadedAttachments;
             await messageDbObject.save();
+
+            // Replicate the message on the remote server if it is enabled
+            ReplicationManager.replicateMessage(messageDbObject);
 
             if (BotConfig.debug)
                 console.log(`Message saved!`.cyan);
