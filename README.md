@@ -21,7 +21,7 @@ Archiving bot for Discord which archives or replicates the server in real time.
   - Enables/Disabled message updating
 - Command for pruning the archive
 - Server wipe command (**!awipe**) - Deletes all the channels and roles (If you want to start with a clean server)
-- Rollback a particular channel or the whole server (This command will disable talking in the chat until the process is done, if the archive is really big it will take days to rollback, since the bot message limit is 5 messages every X seconds, I suggest using the server live time replication option)
+- Rollback a particular channel or the whole server (**!arollback <channel?>**) (This command will disable talking in the chat until the process is done, if the archive is really big it will take days to rollback, since the bot message limit is 5 messages every X seconds, I suggest using the server live time replication option)
 
 ### TODO (Unimplemented):
 
