@@ -13,6 +13,8 @@ const statisticsSchema = new DB.Schema({
         required: true
     },
 
+    channels: [String],
+
     totalBytes: {
         type: Number,
         required: true

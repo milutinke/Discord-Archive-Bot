@@ -66,6 +66,25 @@ class Utils {
     static async doesChannelExist(guild, channelName) {
         return await Utils.getChannelObjectByName(guild, channelName) !== null;
     }
+
+    static getMessageFormatedContent(messageObject) {
+        // Get message content
+        let content = messageObject.content.trim();
+
+        // Replace mentiones user ids with their nicknames or usernames if nicknames are not set
+        messageObject.mentions.members.forEach(member => {
+            const memberName = !member.nickname ? member.user.username : member.nickname;
+
+            content = content.replace(`<@!${member.id}>`, `@${memberName}`).trim();
+            content = content.replace(`<@${member.id}>`, `@${memberName}`).trim();
+            content = content.replace(`<@&${member.id}>`, `@${memberName}`).trim();
+        });
+
+        // Replace channel ids with channel names
+        messageObject.guild.channels.forEach(channel => content = content.replace(`<#${channel.id}>`, `#${channel.name}`).trim());
+
+        return content;
+    }
 }
 
 module.exports = Utils;

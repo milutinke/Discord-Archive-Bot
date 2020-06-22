@@ -23,7 +23,14 @@ class StatsCommand extends AbstractCommand {
             return;
         }
 
-        let message = `Archiving Bot Statistics:\n\nTotal archives messages: ${statistics.messages}\nTotal archived attachments: ${statistics.attachments}\nTotal bandwith: ${PrettySize(statistics.totalBytes)}`;
+        let message = `
+        Archiving Bot Statistics:
+        
+        Total archived channels: ${statistics.channels.length}
+        Total archived messages: ${statistics.messages}
+        Total archived attachments: ${statistics.attachments}
+        Total bandwith: ${PrettySize(statistics.totalBytes)}`;
+
         messageObject.channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(message));
     }
 }

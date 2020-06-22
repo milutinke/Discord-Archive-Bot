@@ -11,7 +11,7 @@ class MessageManager {
         if (BotConfig.debug)
             console.log(`----------------------------------------------[ DEBUG ]----------------------------------------------`.cyan);
 
-        let content = MessageManager.getMessageFormatedContent(messageObject);
+        let content = Utils.getMessageFormatedContent(messageObject);
 
         if (BotConfig.debug && content && content.length)
             console.log(`Message after the formatting: [${content}]`.green);
@@ -121,7 +121,7 @@ class MessageManager {
             // Update the statistics
 
             if (BotConfig.debug)
-                console.log(`Updating statistics ...`.cyan);
+                console.log(`Updating the statistics ...`.cyan);
 
             let statistics = await Statistics.findOne({});
 
@@ -129,8 +129,19 @@ class MessageManager {
                 statistics = new Statistics();
                 statistics.messages = 1;
                 statistics.attachments = downloadedAttachments.length;
+
+                console.log(`Pushed into channels initial: ${messageObject.channel.name}`);
+                const channelsArray = new Array();
+                channelsArray.push(messageObject.channel.name);
+
+                statistics.channels = channelsArray;
                 statistics.totalBytes = totalBytes;
             } else {
+                if (!statistics.channels.includes(messageObject.channel.name)) {
+                    statistics.channels.push(messageObject.channel.name);
+                    console.log(`Pushed into channels: ${messageObject.channel.name}`)
+                }
+
                 statistics.messages++;
                 statistics.attachments += downloadedAttachments.length;
                 statistics.totalBytes += totalBytes;
@@ -148,30 +159,11 @@ class MessageManager {
         }
     }
 
-    static getMessageFormatedContent(messageObject) {
-        // Get message content
-        let content = messageObject.content.trim();
-
-        // Replace mentiones user ids with their nicknames or usernames if nicknames are not set
-        messageObject.mentions.members.forEach(member => {
-            const memberName = !member.nickname ? member.user.username : member.nickname;
-
-            content = content.replace(`<@!${member.id}>`, `@${memberName}`).trim();
-            content = content.replace(`<@${member.id}>`, `@${memberName}`).trim();
-            content = content.replace(`<@&${member.id}>`, `@${memberName}`).trim();
-        });
-
-        // Replace channel ids with channel names
-        messageObject.guild.channels.forEach(channel => content = content.replace(`<#${channel.id}>`, `#${channel.name}`).trim());
-
-        return content;
-    }
-
     static async updateMessage(client, oldMessageObject, newMessageObject) {
         if (!newMessageObject.content.trim())
             return;
 
-        let oldMessageContent = MessageManager.getMessageFormatedContent(oldMessageObject);
+        let oldMessageContent = Utils.getMessageFormatedContent(oldMessageObject);
 
         if (BotConfig.debug && oldMessageContent && oldMessageContent.length)
             console.log(`Old message content after formatting: [${oldMessageContent}]`.green);
@@ -188,7 +180,7 @@ class MessageManager {
         if (!archivedMessage)
             return;
 
-        let newMessageContent = MessageManager.getMessageFormatedContent(newMessageObject);
+        let newMessageContent = Utils.getMessageFormatedContent(newMessageObject);
 
         if (BotConfig.debug && newMessageContent && newMessageContent.length)
             console.log(`New message content after formatting: [${newMessageContent}]`.green);

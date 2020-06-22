@@ -38,7 +38,7 @@ class RollbackCommand extends AbstractCommand {
 
         try {
             // Retreive the cursor, so we can iterate trough the data base
-            const cursor = Message.collection.find({}, { timeout: false });
+            const cursor = Message.collection.find({ $query: {}, $orderby: { timestamp: -1 } }, { timeout: false });
 
             // Iterate trought the data base
             while (await cursor.hasNext()) {

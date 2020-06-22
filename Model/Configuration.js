@@ -1,7 +1,7 @@
 // Local modules
 const DB = require('../Managers/DBManager').mongoose;
 
-// Create User schema
+// Create Configuration schema
 const configurationSchema = new DB.Schema({
     blacklistedChannels: [{
         channelId: {

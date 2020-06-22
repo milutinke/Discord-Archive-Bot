@@ -34,6 +34,10 @@ Archiving bot for Discord which archives or replicates the server in real time.
 - Roles archiving
 - Web Interface (Might not be implemented)
 
+## Known bugs
+
+- Messages sorting when rollbacking does not work (If you had newer messages in the archive, and then you have archived for example a channel with the olrder messages, when rollbacking, the new messages would be sent before then the older ones)
+
 ## Setup
 
 **TODO**
