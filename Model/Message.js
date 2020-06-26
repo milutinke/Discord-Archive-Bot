@@ -15,7 +15,8 @@ const messageSchema = new DB.Schema({
 
     timestamp: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
 
     channelName: {

@@ -30,33 +30,31 @@ class RollbackCommand extends AbstractCommand {
             else specifiedChannel = await Utils.getChannelObjectById(guild, specifiedChannel);
         }
 
+        // Start tracking the exection time
         let start = new Date();
         let hrstart = process.hrtime();
         let fails = 0;
 
+        // Stop users from sending the messages during the rollback
         await ConfigurationManager.setProcess(true);
 
         try {
-            // Retreive the cursor, so we can iterate trough the data base
-            const cursor = Message.collection.find({ $query: {}, $orderby: { timestamp: -1 } }, { timeout: false });
+            // Retreive the messages and sort them (This might be a really expensive operation if there is a lot of data, but I do not know how to sort data which is being iterated by a cursor efficently)
+            // TODO: Optimize if possible
+            // Note: If someone knows how to sort data iterated by cursor, plase do it
+            const fetchedMessages = await Message.collection.find({}, { timeout: false }).sort({ timestamp: 1 }).toArray();
 
-            // Iterate trought the data base
-            while (await cursor.hasNext()) {
-                // Get the current message
-                let currentDocument;
-                let currentChannel;
-
+            await Utils.asyncForEach(fetchedMessages, async currentDocument => {
                 try {
-                    currentDocument = await cursor.next();
+                    let currentChannel;
 
-                    // If the user has specified a channel to be restored
                     if (specifiedChannel) {
                         // Skip if the channel does not exist on the server, so only the name has been provided and the current message is not supposed to be in that channel
                         if (typeof specifiedChannel === 'string' && specifiedChannel !== currentDocument.channelName)
-                            continue;
+                            return;
                         // Skip if the channel does exist on the server and the current message is not supposed to be in that channel
                         else if (typeof specifiedChannel === 'object' && specifiedChannel.name !== currentDocument.channelName)
-                            continue;
+                            return;
                     }
 
                     // Check if the channel where the message needs to be sent does exist, if it does not, create it
@@ -67,7 +65,7 @@ class RollbackCommand extends AbstractCommand {
                     // Skip if for some reason channel is not a valid one!
                     if (!currentChannel || currentChannel === -1) {
                         fails++;
-                        continue;
+                        return;
                     }
 
                     // Get the paths to the attachments
@@ -84,29 +82,35 @@ class RollbackCommand extends AbstractCommand {
                     // Limit the first message to 2000 characters
                     message = message.substr(0, 2000);
 
+                    let sentMessage;
                     // If we have a message which is shorter than 2000 characters and we have attachments, send the message and the attachments, otherwise just send the message
                     if (attachments.length && !secondMessage.length)
-                        await currentChannel.send(message, { files: attachments });
-                    else await currentChannel.send(message);
+                        sentMessage = await currentChannel.send(message, { files: attachments });
+                    else sentMessage = await currentChannel.send(message);
 
                     // Send the remainding part of the message
                     if (secondMessage.length) {
                         // Check if we have attachments which we need to send, if we do have them send them with the second part of the message
                         if (attachments.length)
-                            await currentChannel.send(secondMessage, { files: attachments });
-                        else await currentChannel.send(secondMessage);
+                            sentMessage = await currentChannel.send(secondMessage, { files: attachments });
+                        else sentMessage = await currentChannel.send(secondMessage);
                     }
+
+                    if (currentDocument.pinned)
+                        await sentMessage.pin();
                 } catch (error) {
-                    fails++;
-                    console.log(error);
+                    // Skip the PIN error
+                    if (!(error.code && error.code === 30003)) {
+                        fails++;
+                        console.log(error);
+                    }
                 }
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
+            });
+
             // Allow users to send messages again
             await ConfigurationManager.setProcess(false);
 
+            // Format and display the execution time
             let end = new Date() - start;
             let hrend = process.hrtime(hrstart);
 
@@ -117,8 +121,11 @@ class RollbackCommand extends AbstractCommand {
 
             // Send the success message
             if (fails)
-                channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished\nIt took me **${hrend[0]}** s to do it.\n**${fails}** messages failed to be restored.`));
-            else channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished\nIt took me **${hrend[0]}** s to do it.`));
+                await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished!\nIt took me **${hrend[0]} seconds** to do it.\n**${fails}** messages failed to be restored.`));
+            else await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished!\nIt took me **${hrend[0]} seconds** to do it.`));
+        } catch (error) {
+            console.log(error);
+            await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback failed because of an error, please check out the command line!`));
         }
     }
 }

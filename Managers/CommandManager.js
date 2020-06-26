@@ -36,10 +36,12 @@ class CommandManager {
         if (!messageObject || message.length === 0)
             return;
 
-        console.log("Message in the command manager: " + message);
+        if (BotConfig.debug)
+            console.log("Message in the command manager: " + message);
 
         if (message.startsWith(BotConfig.bot_prefix)) {
-            console.log("Message " + message + " is a valid command");
+            if (BotConfig.debug)
+                console.log("Message " + message + " is a valid command");
 
             for (let i = 0; i < this.commands.length; i++) {
                 let currentCommand = this.commands[i];
@@ -57,7 +59,9 @@ class CommandManager {
                     throw new Error(`The command "${currentCommand.js.name}" (from: ${currentCommand.path}) does not have "execute" method defined!`.red);
 
                 if (message.substr(message.indexOf(BotConfig.bot_prefix) + 1, message.length).trim().includes(currentCommand.js.name)) {
-                    console.log("Executing: " + message.substr(message.indexOf(BotConfig.bot_prefix) + 1, message.length).trim());
+                    if (BotConfig.debug)
+                        console.log("Executing: " + message.substr(message.indexOf(BotConfig.bot_prefix) + 1, message.length).trim());
+
                     await currentCommand.js.execute(messageObject, client);
                 }
             }
