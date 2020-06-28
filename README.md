@@ -1,8 +1,12 @@
+
 # Discord-Archive-Bot
 
 Archiving bot for Discord which archives or replicates the server in real time.
 
 **NOTE: Not finished, work in progress!**
+
+Progress:
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZsAAAAUCAYAAABbCZBBAAABqklEQVR4Xu3csUrDUBQG4HQQ6nbBsT6Fq2/R3aFDfQLBUcQn0NX36XsUdHGKnSwIkYBuIqelaXLi1/nk3pPvBH5Ck0wqPwIECBAg0LHApOP1LU+AAAECBCph4yIgQIAAgc4FhE3nxDYgQIAAgZ+wWZZS7uq6niEhQIAAAQJ/CZRSXuu6vq+q6jkq1YbN8vby7PHh4vP0ZPsePU4dAQIEQgLbp49QnaI8AqvVqlosFpv1en0TDZxJKeXl7aqZCZo8g9YpgUwCwibTtOK9toEzn8/bO5zzyFHtnU3TXEdK1RAgQGB3AWGzu1mWI6bTadtq6L9/YZNlqvokkFRA2CQdXKBtYRNAUkKAwHEEhM1xnPvYRdj0oW5PAgR+FRA2470whM14Z+vMCKQTEDbpRhZuWNiEqRQSINC1gLDpWri/9XcKG48+9zcoOxP4DwLCZpxT3ufRZy91jvNacFYEBiEgbAYxhoM2sddLnd8d+FzNQUdhMQIECIxXYN/P1YxXxJkRIECAwCAEQm9+DqJTTRAgQIBAWgFhk3Z0GidAgEAeAWGTZ1Y6JUCAQFqBLxGJbhUTuD6SAAAAAElFTkSuQmCC" /> **70%**
 
 ## Features
 
