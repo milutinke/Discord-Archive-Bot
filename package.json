@@ -7,6 +7,7 @@
   "license": "ISC",
   "description": "Simple Archive bot for discord",
   "dependencies": {
+    "archiver": "^4.0.1",
     "axios": "^0.19.2",
     "bluebird": "~3.7.1",
     "colors": "~1.4.0",

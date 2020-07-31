@@ -34,6 +34,7 @@ class RollbackCommand extends AbstractCommand {
         let start = new Date();
         let hrstart = process.hrtime();
         let fails = 0;
+        let pinFailed = 0;
 
         // Stop users from sending the messages during the rollback
         await ConfigurationManager.setProcess(true);
@@ -103,6 +104,8 @@ class RollbackCommand extends AbstractCommand {
                     if (!(error.code && error.code === 30003)) {
                         fails++;
                         console.log(error);
+                    } else {
+                        pinFailed++;
                     }
                 }
             });
@@ -123,6 +126,9 @@ class RollbackCommand extends AbstractCommand {
             if (fails)
                 await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished!\nIt took me **${hrend[0]} seconds** to do it.\n**${fails}** messages failed to be restored.`));
             else await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback has been finished!\nIt took me **${hrend[0]} seconds** to do it.`));
+
+            if (pinFailed > 0)
+                await channel.send(`${pinFailed} messages have not been pinned because the limit was reached`);
         } catch (error) {
             console.log(error);
             await channel.send(new Discord.RichEmbed().setColor([0, 255, 255]).setDescription(`The rollback failed because of an error, please check out the command line!`));

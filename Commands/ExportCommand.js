@@ -16,6 +16,9 @@ class ExportCommand extends AbstractCommand {
             return;
         }
 
+        return await messageObject.channel.send(`${messageObject.author} - This command has not been implemented yet!`);
+
+        /*
         const channel = messageObject.channel;
         const guild = messageObject.guild;
         const messageArguments = this.getCommandArguments(messageObject.content);
@@ -109,7 +112,7 @@ class ExportCommand extends AbstractCommand {
 
             if (error.length > 2000)
                 await channel.send('```' + error.substring(2000, error.length) + '```');
-        }
+        }*/
     }
 }
 

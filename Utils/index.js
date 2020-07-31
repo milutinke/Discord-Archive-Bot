@@ -1,5 +1,6 @@
 const FileSystem = require('fs');
 const Axios = require('axios');
+const Archiver = require('archiver');
 
 class Utils {
     static async downloadFromURL(url, path) {
@@ -84,6 +85,17 @@ class Utils {
         messageObject.guild.channels.forEach(channel => content = content.replace(`<#${channel.id}>`, `#${channel.name}`).trim());
 
         return content;
+    }
+
+    static async zipDirectory(source, out) {
+        const archive = Archiver('zip', { zlib: { level: 9 } });
+        const stream = FileSystem.createWriteStream(out);
+
+        return new Promise((resolve, reject) => {
+            archive.directory(source, false).on('error', err => reject(err)).pipe(stream);
+            stream.on('close', () => resolve());
+            archive.finalize();
+        });
     }
 }
 

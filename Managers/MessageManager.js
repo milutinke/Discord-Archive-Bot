@@ -20,6 +20,22 @@ class MessageManager {
         const authorId = messageObject.author.id;
         const authorName = !messageObject.author.nickname ? messageObject.author.username : messageObject.author.nickname;
 
+        const found = await Message.exists({
+            authorId: messageObject.author.id,
+            timestamp: messageObject.createdTimestamp,
+            channelName: messageObject.channel.name,
+            message: content
+        }, { timeout: false });
+
+        if (found) {
+            console.log(found);
+
+            if (BotConfig.debug)
+                console.log('This message has already been archived, skipping!');
+
+            return;
+        }
+
         // Get information about attachments in the message if there are any
         const Attachments = (messageObject.attachments).array();
         const foundAttachments = new Array();
