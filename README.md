@@ -1,11 +1,10 @@
 # Discord-Archive-Bot
 
-Archiving bot for Discord which archives or replicates the server in real time.
+Simple **Archiving** bot for Discord which archives or replicates the server in real time.
 
 **NOTE: Not finished, work in progress!**
 
-Progress:
-![][progress_image] **80%**
+Progress: **60%**
 
 ## Features
 
@@ -35,11 +34,17 @@ Progress:
 
 ### TODO (Unimplemented):
 
+-Sections archiving and distinguishing between channels with the same name but different sections
+  - If there are multiple channels with the same name, bot should ask the user which one he/she wants to archive or restore
+  
 - Commands:
-  - Export archive
-- Archive export: JSON, PDF, Plain Text, CSV, DOCX
-- Roles archiving
-- Web Interface
+  - Export archive (High priority)
+  - Archive export: JSON, PDF, Plain Text, CSV, DOCX, HTML
+- Roles archiving (High priority)
+- Web Interface (Low priority)
+- Restoring messages as an images (If they do not include an attachment) (Low priority)
+- Archiving and restoration of embedded messages (Low priority)
+- Replication Bot (High priority)
 
 ## Setup
 
@@ -48,5 +53,3 @@ Progress:
 ## Contibuting
 
 Contact me: **milutinke@gmx.com**
-
-[progress_image]:data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZsAAAAUCAYAAABbCZBBAAABj0lEQVR4Xu3cMUrEQBQG4KQQYjdguZ7C1lukt0ixnkCwFPEE2nqf3COgjdVo5YIQGVCwknEky5L5tkkzL8l8eeEnbCZt40eAAAECBBYWaBfev90TIECAAIFG2GgCAgQIEFhcQNgsTuwABAgQIPAdNtsQwk2McYOEAAECBAj8JhBCeI4x3jZN85grlcJme31+cn939nF8tHvNrTOOAAEC1QvsHt6rNBjHsRmG4W2apqvcwGlDCE8vF/NG0FTZMyZNgMA/BGoNm0SWAqfv+/SEc5pDmJ5s5vkyZ6gxBAgQIPBToOawSQ5d16VN1n//wsa9Q4AAgUIBYSNsCltHGQECBPIFhI2wye8WIwkQIFAoIGyETWHrKCNAgEC+gLARNvndYiQBAgQKBYTNH8LGq8+FXaaMAIHqBWoOm5JXny3qrP6WAUCAQIlArWFTtKjzC9jnako6TQ0BAgQqFCj9XE2FVKZMgAABAvsUyFr5uc8TciwCBAgQWJ+AsFnfNTUjAgQIHJyAsDm4S+KECBAgsD6BT3p3bhUjOAPcAAAAAElFTkSuQmCC
