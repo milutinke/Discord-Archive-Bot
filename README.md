@@ -34,12 +34,13 @@ Progress: **60%**
 
 ### TODO (Unimplemented):
 
--Sections archiving and distinguishing between channels with the same name but different sections
+- Sections archiving and distinguishing between channels with the same name but different sections
   - If there are multiple channels with the same name, bot should ask the user which one he/she wants to archive or restore
   
 - Commands:
   - Export archive (High priority)
   - Archive export: JSON, PDF, Plain Text, CSV, DOCX, HTML
+  
 - Roles archiving (High priority)
 - Web Interface (Low priority)
 - Restoring messages as an images (If they do not include an attachment) (Low priority)
