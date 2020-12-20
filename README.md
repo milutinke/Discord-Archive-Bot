@@ -4,13 +4,13 @@ Simple **Archiving** bot for Discord which archives or replicates the server in 
 
 **NOTE: Not finished, work in progress!**
 
-Progress: **60%**
+Progress: **50%**
 
 ## Features
 
 ### Implemented:
 
-- Message archiving
+- Message archiving (Does not include embeded messages for now)
 - Attachments archiving
 - Member list archiving (Join date, last name, name change histrory, number of reentries to the server)
 - Statistics command (**!astats**)
@@ -34,11 +34,21 @@ Progress: **60%**
 
 ### TODO (Unimplemented):
 
-- Sections archiving and distinguishing between channels with the same name but different sections
+- Categories archiving and distinguishing between channels with the same name but different categories
   - If there are multiple channels with the same name, bot should ask the user which one he/she wants to archive or restore
   
+- Channel properties archiving:
+  - Channel NSFW
+  - Channel topic
+  - Channel category
+  - Channel position
+  - Channel type
+  - Channel ratelimit per user
+  - Channel bitrate
+  - Channel user limit
+  
 - Commands:
-  - Export archive (High priority)
+  - Export archive
   - Archive export: JSON, PDF, Plain Text, CSV, DOCX, HTML
   
 - Roles archiving (High priority)
@@ -46,6 +56,7 @@ Progress: **60%**
 - Restoring messages as an images (If they do not include an attachment) (Low priority)
 - Archiving and restoration of embedded messages (Low priority)
 - Replication Bot (High priority)
+- Update bot messages to Embedded messages
 
 ## Setup
 
